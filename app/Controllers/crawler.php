@@ -26,6 +26,40 @@ class Crawler
 		add_action( 'wp_ajax_start_crawler', [ self::$class_path, 'start_crawler' ] );
 	}
 
+	/**
+	 * Method to enqueue scripts and styles.
+	 *
+	 * @return void
+	 */
+	public static function enqueue_scripts_and_styles() {
+		wp_register_script( 'wpmedia-crawler-js', WP_MEDIA_CRAWLER_PLUGIN_URL . '/assets/js/main.min.js', [ 'jquery' ], '1.0.0', true );
+		wp_localize_script( 'wpmedia-crawler-js', 'myAjax', [ 'ajaxurl' => admin_url( 'admin-ajax.php' ) ] );
+		wp_enqueue_script( 'wpmedia-crawler-js' );
+
+		wp_register_style( 'wpmedia-crawler-css', WP_MEDIA_CRAWLER_PLUGIN_URL . '/assets/css/main.min.css', false, '1.0.0' );
+		wp_enqueue_style( 'wpmedia-crawler-css' );
+
+	}
+
+	/**
+	 * Method for registering options page.
+	 *
+	 * @return void
+	 */
+	public static function register_options_page() {
+		add_options_page( 'Crawler', 'Crawler', 'manage_options', 'wpmediacrawler', [ self::$class_path, 'options_page_callback' ] );
+	}
+
+	/**
+	 * Callback for options page.
+	 *
+	 * @return void
+	 */
+	public static function options_page_callback() {
+		$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'templates/admin/crawler-options.php';
+		include_once $template_path;
+	}
+
     /**
 	 * Using ajax to initialize our web crawler
 	 *
@@ -104,5 +138,51 @@ class Crawler
 			];
 		}
 		return $schedules;
+	}
+
+	/**
+	 * Method to register sitemap end point.
+	 *
+	 * @return void
+	 * @author Nderi Kamau <nderikamau1212@gmail.com>
+	 */
+	public static function add_sitemap_endpoint() {
+		add_rewrite_endpoint( 'wmsitemap', EP_ROOT );
+		flush_rewrite_rules();
+	}
+
+	/**
+	 * Method to set query variable for custom endpoint to true.
+	 *
+	 * @param array $vars The vars array.
+	 *
+	 * @return vars array
+	 * @author Nderi Kamau <nderikamau1212@gmail.com>
+	 */
+	public static function sitemap_filter_request( $vars ) {
+		if ( isset( $vars['wmsitemap'] ) && empty( $vars['wmsitemap'] ) ) {
+			$vars['wmsitemap'] = true;
+		}
+		return $vars;
+	}
+
+	/**
+	 * Method to load sitemap template.
+	 *
+	 * @return void
+	 * @author Nderi Kamau <nderikamau1212@gmail.com>
+	 */
+	public static function load_sitemap_template() {
+		if ( get_query_var( 'wmsitemap' ) ) {
+			$sitemap_markup = '';
+			$sitemap_path   = WP_MEDIA_CRAWLER_PLUGIN_DIR . '/storage/sitemap.html';
+			if ( file_exists( $sitemap_path ) ) {
+				$sitemap_markup = file_get_contents( $sitemap_path );
+			}
+			$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'resources/template-sitemap.php';
+			include $template_path;
+			exit();
+		}
+
 	}
 }
