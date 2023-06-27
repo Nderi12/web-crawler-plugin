@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) {
 		<input type="button" name="reset-crawler" id="reset-crawler" class="button button-primary mx-3" value="<?php echo __('Reset Crawler', 'wp-media-web-crawler'); ?>" style="background-color: orange;">
 	</div>
 	<div>
-		<img class="loader" src="<?php echo WP_MEDIA_CRAWLER_PLUGIN_URL . 'assets/img/loader.gif'; ?>">
+		<img class="loader" src="<?php echo WP_MEDIA_CRAWLER_PLUGIN_URL . 'assets/loader.gif'; ?>">
 	</div>
 	<div id="links-section"></div>
 </div>
