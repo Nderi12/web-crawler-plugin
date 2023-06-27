@@ -23,7 +23,16 @@ class Crawler
     protected static $class_path = WP_MEDIA_CRAWLER_NAMESPACE . '\Crawler';
 
 	public static function init_hooks() {
+		add_action( 'admin_menu', [ self::$class_path, 'register_options_page' ] );
+		add_action( 'admin_enqueue_scripts', [ self::$class_path, 'enqueue_scripts_and_styles' ] );
 		add_action( 'wp_ajax_start_crawler', [ self::$class_path, 'start_crawler' ] );
+		add_action( 'wp_ajax_view_links', [ self::$class_path, 'view_links' ] );
+		add_action( 'wp_ajax_reset_crawler', [ self::$class_path, 'reset_crawler' ] );
+		add_filter( 'cron_schedules', [ self::$class_path, 'cron_schedules' ] );
+		add_action( 'crawler_task', [ self::$class_path, 'run_crawler_tasks' ] );
+		add_action( 'init', [ self::$class_path, 'add_sitemap_endpoint' ], 99 );
+		add_filter( 'request', [ self::$class_path, 'sitemap_filter_request' ] );
+		add_action( 'template_redirect', [ self::$class_path, 'load_sitemap_template' ] );
 	}
 
 	/**
