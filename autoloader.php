@@ -7,7 +7,7 @@
 
 namespace WPMedia\Web\Crawler;
 
-use Controllers\Crawler as ControllersCrawler;
+use Actions\Crawler;
 
 /**
  * Represents all methods related to autoloading of plugin.
@@ -68,8 +68,9 @@ class Autoloader {
 		$this->load_language( 'wp-media-web-crawler' );
 
 		spl_autoload_register( [ $this, 'autoload' ] );
+		
 		// Initiate the Crawler.
-		ControllersCrawler::init_hooks();
+		Crawler::init_hooks();
 	}
 
 	/**

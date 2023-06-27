@@ -1,34 +1,34 @@
 <?php
 /** Crawler file
  *
- * @package Controllers
+ * @package Actions
  * @author Nderi Kamau <nderikamau1212@gmail.com>
  */
 
-namespace Controllers;
+namespace Actions;
+
+use \Helper\Helper as CrawlerHelper;
 
 /**
- * A controller to handle all web crawler functions
- * 
- * @author Nderi Kamau <nderikamau1212@gmail.com>
+ * Represents all methods related to Crawler class.
  */
-class Crawler
-{
-    /**
-     * Path to the class.
-     *
-     * @var $class_path
-     * @type string
-     */
-    protected static $class_path = WP_MEDIA_CRAWLER_NAMESPACE . '\Crawler';
+class Crawler {
 
 	/**
-	 * Initalizing wordpress hooks
+	 * Path to the class.
 	 *
-	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
+	 * @var $class_path
+	 * @type string
+	 */
+	protected static $class_path = WP_MEDIA_CRAWLER_NAMESPACE . '\Crawler';
+
+	/**
+	 * Initializes WordPress hooks.
+	 *
+	 * @return  void
 	 */
 	public static function init_hooks() {
+
 		add_action( 'admin_menu', [ self::$class_path, 'register_options_page' ] );
 		add_action( 'admin_enqueue_scripts', [ self::$class_path, 'enqueue_scripts_and_styles' ] );
 		add_action( 'wp_ajax_start_crawler', [ self::$class_path, 'start_crawler' ] );
@@ -39,13 +39,13 @@ class Crawler
 		add_action( 'init', [ self::$class_path, 'add_sitemap_endpoint' ], 99 );
 		add_filter( 'request', [ self::$class_path, 'sitemap_filter_request' ] );
 		add_action( 'template_redirect', [ self::$class_path, 'load_sitemap_template' ] );
+
 	}
 
 	/**
 	 * Method to enqueue scripts and styles.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function enqueue_scripts_and_styles() {
 		wp_register_script( 'wpmedia-crawler-js', WP_MEDIA_CRAWLER_PLUGIN_URL . '/assets/js/main.min.js', [ 'jquery' ], '1.0.0', true );
@@ -72,15 +72,46 @@ class Crawler
 	 * @return void
 	 */
 	public static function options_page_callback() {
-		$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'templates/admin/crawler-options.php';
+		$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'resources/admin-buttons.php';
 		include_once $template_path;
 	}
 
-    /**
-	 * Using ajax to initialize our web crawler
+	/**
+	 * Method for running crawler tasks.
+	 *
+	 * @param boolean $return_links Flag whether to return links array or not.
+	 * @return Links array
+	 */
+	public static function run_crawler_tasks( $return_links = false ) {
+
+		// Deleting last crawl results.
+		delete_transient( 'wpmedia_crawler_info' );
+		// Delete sitemap.html file.
+		$sitemap_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . '/storage/sitemap.html';
+		unlink( $sitemap_path );
+
+		// Getting all links of home page.
+		$links = CrawlerHelper::get_all_internal_links();
+		if ( ! empty( $links ) ) {
+			set_transient( 'wpmedia_crawler_info', wp_json_encode( $links ), 60 * 60 );
+			// Create sitemap.html file.
+			$markup = '<ul>';
+			foreach ( $links as $link ) {
+				$markup .= "<li><a href = '" . $link . "'>" . $link . '</a></li>';
+			}
+			$markup .= '</ul>';
+			file_put_contents( $sitemap_path, $markup );
+		}
+
+		if ( $return_links ) {
+			return $links;
+		}
+	}
+
+	/**
+	 * Ajax method to start the crawler.
 	 *
 	 * @return void
-     * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function start_crawler() {
 
@@ -94,25 +125,26 @@ class Crawler
 		add_option( 'wpmedia_crawler_started', 1 );
 		if ( ! empty( $links ) ) {
 			// Display Links.
-			$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'resources/links-list.php';
+			$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'resources/links-link.php';
 			include_once $template_path;
 		} else {
 			$markup = '<div class = \'no-links-msg\' >' . __( 'No links found.', 'wp-media-web-crawler' ) . '</div>';
 			echo $markup;
 		}
 		die();
+
 	}
 
 	/**
-	 * Using ajax to list links for admin
+	 * Ajax method to view links by admin.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function view_links() {
+		// Get Links info.
 		$links = json_decode( get_transient( 'wpmedia_crawler_info' ), true );
 		if ( false !== $links && ! empty( $links ) ) {
-			$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'resources/links-list.php';
+			$template_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . 'resources/links-link.php';
 			include_once $template_path;
 		} else {
 			$markup = '<div class = \'no-links-msg\'>' . __( 'No links found.', 'wp-media-web-crawler' ) . '</div>';
@@ -125,7 +157,6 @@ class Crawler
 	 * Ajax method to reset the crawler.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function reset_crawler() {
 		delete_transient( 'wpmedia_crawler_info' );
@@ -134,7 +165,7 @@ class Crawler
 		// Delete sitemap.html file.
 		$sitemap_path = WP_MEDIA_CRAWLER_PLUGIN_DIR . '/storage/sitemap.html';
 		unlink( $sitemap_path );
-		$markup = '<div class = \'reset-msg\'>' . __( 'Resetting done. Click on Start Crawler to schedule the task again.', 'wp-media-web-crawler' ) . '</div>';
+		$markup = '<div class = \'reset-msg\'>' . __( 'Web crawler reset successfully. Click on Start Crawler to schedule the task again.', 'wp-media-web-crawler' ) . '</div>';
 		echo $markup;
 		die();
 	}
@@ -144,7 +175,6 @@ class Crawler
 	 *
 	 * @param array $schedules Schedules array.
 	 * @return schedules array
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function cron_schedules( $schedules ) {
 		if ( ! isset( $schedules['1hour'] ) ) {
@@ -160,7 +190,6 @@ class Crawler
 	 * Method to register sitemap end point.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function add_sitemap_endpoint() {
 		add_rewrite_endpoint( 'wmsitemap', EP_ROOT );
@@ -173,7 +202,6 @@ class Crawler
 	 * @param array $vars The vars array.
 	 *
 	 * @return vars array
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function sitemap_filter_request( $vars ) {
 		if ( isset( $vars['wmsitemap'] ) && empty( $vars['wmsitemap'] ) ) {
@@ -186,7 +214,6 @@ class Crawler
 	 * Method to load sitemap template.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function load_sitemap_template() {
 		if ( get_query_var( 'wmsitemap' ) ) {
@@ -201,4 +228,5 @@ class Crawler
 		}
 
 	}
+
 }
