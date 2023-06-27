@@ -1,0 +1,2 @@
+## Problem to be solved:
+The problem is to build an app or plugin that helps website administrators improve their SEO rankings by providing insights into how their web pages are linked together, particularly to the home page. The solution should allow the admin to trigger a crawl, extract internal hyperlinks, store the results, and display them in a user-friendly manner.

@@ -1,13 +1,12 @@
 {
-	"name": "wp-media/package-template",
-	"description": "Repository template for our packages",
-	"homepage": "https://github.com/wp-media/package-template",
+	"name": "nderikamau/wp-media-web-crawler",
+	"description": "The Wp Media Web Page Crawler is designed to scan all internal links within a website and display them on a sitemap page. It performs automatic crawls of the home page every hour, allowing administrators to conveniently review the links and enhance their SEO rankings.",
+	"homepage": "https://github.com/Nderi12/pages-web-crawler-wordpress-plugin",
 	"license": "GPL-2.0+",
 	"authors": [
 		{
-			"name": "WP Media",
-			"email": "contact@wp-media.me",
-			"homepage": "https://wp-media.me"
+			"name": "Nderi Kamau",
+			"email": "nderikamau1212@gmail.com"
 		}
 	],
 	"type": "library",
