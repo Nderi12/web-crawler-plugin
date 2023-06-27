@@ -15,6 +15,7 @@ class Helper {
 	 * Method to get internal links of home page.
 	 *
 	 * @return mixed
+	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function get_all_internal_links() {
 		$links_array = [];
