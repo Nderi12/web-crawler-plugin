@@ -22,6 +22,12 @@ class Crawler
      */
     protected static $class_path = WP_MEDIA_CRAWLER_NAMESPACE . '\Crawler';
 
+	/**
+	 * Initalizing wordpress hooks
+	 *
+	 * @return void
+	 * @author Nderi Kamau <nderikamau1212@gmail.com>
+	 */
 	public static function init_hooks() {
 		add_action( 'admin_menu', [ self::$class_path, 'register_options_page' ] );
 		add_action( 'admin_enqueue_scripts', [ self::$class_path, 'enqueue_scripts_and_styles' ] );
@@ -39,6 +45,7 @@ class Crawler
 	 * Method to enqueue scripts and styles.
 	 *
 	 * @return void
+	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function enqueue_scripts_and_styles() {
 		wp_register_script( 'wpmedia-crawler-js', WP_MEDIA_CRAWLER_PLUGIN_URL . '/assets/js/main.min.js', [ 'jquery' ], '1.0.0', true );
