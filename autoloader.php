@@ -6,7 +6,8 @@
 
 namespace WPMedia\Web\Crawler;
 
-use \Actions\Crawler as Crawler;
+use Actions\Crawler;
+
 /**
  * Represents all methods related to autoloading of plugin.
  */
@@ -90,7 +91,7 @@ class Autoloader {
 		$class = str_replace( '\\', DIRECTORY_SEPARATOR, $class );
 		if ( ! class_exists( $class ) ) {
 			$class_arr       = explode( '\\', $class );
-			$class_full_path = $this->plugin_path . 'includes/';
+			$class_full_path = $this->plugin_path . 'inc/';
 			foreach ( $class_arr as $key => $folder ) {
 				if ( ( count( $class_arr ) - 1 ) === $key ) {
 					$class_full_path .= 'class-' . strtolower( $folder ) . '.php';

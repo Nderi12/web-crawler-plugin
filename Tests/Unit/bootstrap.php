@@ -12,7 +12,7 @@ require_once __DIR__ . '/../../vendor/antecedent/patchwork/Patchwork.php';
 
 require_once __DIR__ . '/../../autoloader.php';
 
-require_once __DIR__ . '/../../includes/Actions/class-crawler.php';
+require_once __DIR__ . '/../../inc/Actions/class-crawler.php';
 
 // Include the class for TestCase
 require_once __DIR__ . '/TestCase.php';
