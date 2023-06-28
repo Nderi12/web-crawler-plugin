@@ -60,6 +60,7 @@ class Autoloader {
 		$this->load_language( 'wp-media-web-crawler' );
 
 		spl_autoload_register( [ $this, 'autoload' ] );
+		
 		// Initiate the Crawler.
 		Crawler::init_hooks();
 	}

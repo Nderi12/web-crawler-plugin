@@ -140,7 +140,6 @@ class Crawler {
 	 * Method to view links by admin.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function view_links() {
 		// Retrieve the links from the transient and decode them from JSON.
