@@ -9,13 +9,12 @@ namespace Helper;
 /**
  * Represents all methods related of Core Helper.
  */
-class Helper {
+class Core {
 
 	/**
 	 * Method to get internal links of home page.
 	 *
 	 * @return mixed
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function get_all_internal_links() {
 		$links_array = [];
