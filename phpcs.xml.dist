@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WP Media" xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
-	<description>The custom ruleset for WP Media projects</description>
+	<description>The custom ruleset for WP Media Web Page Crawler</description>
 
 	<!-- For help in understanding this file: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml -->
 	<!-- For help in using PHPCS: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->
@@ -29,12 +29,12 @@
 	</rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
-            <property name="text_domain" type="array" value="rocket" />
+            <property name="text_domain" type="array" value="wp-media-web-crawler" />
         </properties>
     </rule>
     <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
         <properties>
-            <property name="prefixes" type="array" value="rocket,wp_rocket" />
+            <property name="prefixes" type="array" value="wpmedia,wp_media,actions,helper" />
         </properties>
     </rule>
     <rule ref="WordPress.Files.FileName">
@@ -54,6 +54,9 @@
 	<rule ref="WordPress-Extra">
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
 		<exclude name="WordPress.PHP.DisallowShortTernary.Found"/>
+		<exclude name="WordPress.Security.EscapeOutput.OutputNotEscaped"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents"/>
+		<exclude name="WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents"/>
 	</rule>
 
 	<!-- Enforce short array syntax: `[]` in place of `array()`. -->

@@ -1,17 +1,14 @@
 <?php
-/** WP Web Crawler Autoloader file
+/** Autoloader file
  *
  * @package WPMedia\Web\Crawler
- * @author Nderi Kamau <nderikamau1212@gmail.com>
  */
 
 namespace WPMedia\Web\Crawler;
 
-use Controllers\Crawler as ControllersCrawler;
-
+use \Actions\Crawler as Crawler;
 /**
  * Represents all methods related to autoloading of plugin.
- * @author Nderi Kamau <nderikamau1212@gmail.com>
  */
 class Autoloader {
 
@@ -21,7 +18,6 @@ class Autoloader {
 	 * @var $instance
 	 * @see get_instance()
 	 * @type object
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static $instance = null;
 	/**
@@ -29,7 +25,6 @@ class Autoloader {
 	 *
 	 * @var $plugin_url
 	 * @type string
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public $plugin_url = '';
 	/**
@@ -37,7 +32,6 @@ class Autoloader {
 	 *
 	 * @var $plugin_path
 	 * @type string
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public $plugin_path = '';
 
@@ -46,7 +40,6 @@ class Autoloader {
 	 *
 	 * @wp-hook plugins_loaded
 	 * @return  object of this class
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -60,7 +53,6 @@ class Autoloader {
 	 *
 	 * @wp-hook plugins_loaded
 	 * @return  void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public function plugin_setup() {
 		$this->plugin_url  = plugins_url( '/', __FILE__ );
@@ -69,7 +61,7 @@ class Autoloader {
 
 		spl_autoload_register( [ $this, 'autoload' ] );
 		// Initiate the Crawler.
-		ControllersCrawler::init_hooks();
+		Crawler::init_hooks();
 	}
 
 	/**
@@ -81,7 +73,6 @@ class Autoloader {
 	 * @wp-hook init
 	 * @param   string $domain Domain String.
 	 * @return  void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public function load_language( $domain ) {
 		load_plugin_textdomain( $domain, false, $this->plugin_path . '/languages' );
@@ -92,7 +83,6 @@ class Autoloader {
 	 *
 	 * @param string $class ClassName.
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public function autoload( $class ) {
 
@@ -117,7 +107,6 @@ class Autoloader {
 	 * Callback method for plugin activation.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public function plugin_activation() {
 		// clear the permalinks to remove custom url from the database.
@@ -128,7 +117,6 @@ class Autoloader {
 	 * Callback method for plugin deactivation.
 	 *
 	 * @return void
-	 * @author Nderi Kamau <nderikamau1212@gmail.com>
 	 */
 	public function plugin_deactivation() {
 		// clear the permalinks to remove custom url from the database.

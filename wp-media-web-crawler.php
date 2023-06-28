@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name:       Web Crawler
  * Plugin URI:        https://github.com/Nderi12/wp-media-web-crawler-plugin
- * Description:       A plugin to crawl all internal links of home page of website.
+ * Description:       The Wp Media Web Page Crawler is designed to scan all internal links within a website and display them on a sitemap page. It performs automatic crawls of the home page every hour, allowing administrators to conveniently review the links and enhance their SEO rankings.
  * Version:           1.0.0
  * Author:            Nderi Kamau
  * Text Domain:       wp-media-web-crawler
@@ -33,11 +33,7 @@ You should have received a copy of the GNU General Public License
 along with SEO Web Page Crawler. If not, see http://www.gnu.org/licenses/gpl-2.0.txt.
 */
 
-/**
- * Make sure we don't expose any info if called directly.
- * 
- * @author Nderi Kamau <nderikamau1212@gmail.com>
- */
+// Make sure we don't expose any info if called directly.
 if ( ! function_exists( 'add_action' ) ) {
 	echo 'Invalid request';
 	exit;
