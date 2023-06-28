@@ -34,7 +34,7 @@ Creating a dedicated sitemap page to display the internal links provides a centr
 Building the functionality as a WordPress plugin enables seamless integration with the WordPress admin dashboard. Administrators can access the sitemap page directly from their familiar WordPress environment, reducing the need to switch between different tools or platforms.
 
 # How the code works and why:
-The code for the WordPress plugin utilizes WordPress hooks and functions to implement the desired functionality. Here's an overview of how it works:
+The code for the WordPress plugin utilizes WordPress wp_ajax hooks and functions to implement the desired functionality. Here's an overview of how it works:
 
 **1. Crawling the Home Page:**
 The plugin uses WordPress's scheduling feature to schedule a recurring event that triggers the crawling process. The event is set to occur every hour. When the event is triggered, the plugin retrieves the home page URL and fetches its content.
